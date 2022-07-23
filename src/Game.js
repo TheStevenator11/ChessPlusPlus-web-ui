@@ -1,7 +1,9 @@
 import {Chessboard} from 'react-chessboard';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Chess} from 'chess.js';
+import axios from 'axios';
 import './App.css';
+
 
 function Game() {
   const chessboardRef = useRef();
@@ -11,8 +13,27 @@ function Game() {
   const [moveSquares, setMoveSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
   const [currentTimeout, setCurrentTimeout] = useState(undefined);
+  const [response, setResponse] = useState(null);
 
+  var uri = 'http://localhost:8080/'
+  useEffect(() => {
+    if(response === null){
+      getData();
+    }else if(response.side == "WHITE"){
+      console.log("Black's move")
+      makeRandomMove();
+    }
+  }, [response])
 
+  const getData = () => {
+    axios.get(uri, {params: {fen: game.fen(), depth: 3}}).then(
+      (resp) => {
+        console.log(resp.data)
+        setResponse(resp.data);
+      }
+    )
+  }
+  
   function safeGameMutate(modify) {
     setGame((g) => {
       const update = { ...g };
@@ -23,14 +44,15 @@ function Game() {
 
   function makeRandomMove() {
     const possibleMoves = game.moves();
-
+    console.log(response)
     // exit if the game is over
     if (game.game_over() || game.in_draw() || possibleMoves.length === 0) return;
 
     const randomIndex = Math.floor(Math.random() * possibleMoves.length);
     safeGameMutate((game) => {
-      game.move(possibleMoves[randomIndex]);
+      game.move(response.move, {sloppy: true});
     });
+    getData();
   }
 
   function onDrop(sourceSquare, targetSquare) {
@@ -41,6 +63,7 @@ function Game() {
       promotion: 'q' // always promote to a queen for example simplicity
     });
     setGame(gameCopy);
+    getData()
     // illegal move
     if (move === null) return false;
     setMoveSquares({
@@ -71,7 +94,7 @@ function Game() {
     if (moves.length === 0) {
       return;
     }
-
+    
     const newSquares = {};
     moves.map((move) => {
       newSquares[move.to] = {
@@ -106,6 +129,7 @@ function Game() {
 
   return (
     <div className='App'>
+      
       <Chessboard
         id="SquareStyles"
         arePremovesAllowed={true}
