@@ -7,4 +7,18 @@
   height: 100vh;
 }
 
+.ScreenContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100vh;
+  background: linear-gradient(#FF9BC6,#B7B6FF);
+}
+
+h1 {
+  color: white;
+}
+
+
 

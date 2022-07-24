@@ -26,7 +26,7 @@ function Game() {
   }, [response])
 
   const getData = () => {
-    axios.get(uri, {params: {fen: game.fen(), depth: 3}}).then(
+    axios.get(uri, {params: {fen: game.fen(), depth: 2}}).then(
       (resp) => {
         console.log(resp.data)
         setResponse(resp.data);

@@ -3,6 +3,7 @@ import './App.css';
 import {auth, provider} from './firebase-config'
 import {signInWithPopup} from 'firebase/auth'
 import {useNavigate} from 'react-router-dom'
+import { Button } from '@mui/material';
 
 
 function Login({setIsAuth}) {
@@ -19,11 +20,11 @@ function Login({setIsAuth}) {
         })
     };
     return (
-        <div>
+        <div className='ScreenContainer'>
             <h1>Sign in with Google to Play</h1>
-            <button className='login-with-google-btn' onClick={signInWithGoogle}>
+            <Button variant='outlined' type='primary' onClick={signInWithGoogle}>
                 Sign in with Google
-            </button>
+            </Button>
         </div>
     );
 }
