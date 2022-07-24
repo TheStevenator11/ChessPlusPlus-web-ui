@@ -1,0 +1,18 @@
+version: '3'
+services:
+  svc:
+    build:
+      context: ..\ChessPlusPlus-service\
+      dockerfile: Dockerfile
+    ports: 
+      - "8080:8080"
+    restart: always
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: always
+    depends_on:
+      - svc
