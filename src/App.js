@@ -18,6 +18,7 @@ const theme = createTheme({
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
+  console.log(isAuth)
   return (
     <ThemeProvider theme={theme}>
       <Router>

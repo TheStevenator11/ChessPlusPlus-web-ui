@@ -12,18 +12,18 @@ function Game() {
   const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [moveSquares, setMoveSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
-  const [currentTimeout, setCurrentTimeout] = useState(undefined);
+
   const [response, setResponse] = useState(null);
 
   var uri = 'http://localhost:8080/'
   useEffect(() => {
     if(response === null){
       getData();
-    }else if(response.side == "WHITE"){
+    }else if(response.side === "WHITE"){
       console.log("Black's move")
       makeRandomMove();
     }
-  }, [response])
+  })
 
   const getData = () => {
     axios.get(uri, {params: {fen: game.fen(), depth: 2}}).then(
@@ -48,7 +48,7 @@ function Game() {
     // exit if the game is over
     if (game.game_over() || game.in_draw() || possibleMoves.length === 0) return;
 
-    const randomIndex = Math.floor(Math.random() * possibleMoves.length);
+    //const randomIndex = Math.floor(Math.random() * possibleMoves.length);
     safeGameMutate((game) => {
       game.move(response.move, {sloppy: true});
     });
@@ -71,8 +71,7 @@ function Game() {
       [targetSquare]: { backgroundColor: 'rgba(255, 255, 0, 0.4)' }
     });
     // store timeout so it can be cleared on undo/reset so computer doesn't execute move
-    const newTimeout = setTimeout(makeRandomMove, 200);
-    setCurrentTimeout(newTimeout);
+    
     
     return true;
   }
