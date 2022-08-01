@@ -41,6 +41,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag chessplusplus-ui:$(date +%s)
     - name: Setup gcloud Auth
@@ -54,7 +55,7 @@ jobs:
         gcloud builds submit \
           --quiet \
           --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
-      working-directory: .docker
+      working-directory: .
     - name: Deploy to GCR
       run: |-
         gcloud run deploy "$SERVICE_NAME" \
